@@ -11,7 +11,6 @@ class PasswordModel {
     required this.password,
   });
 
-  // Convert ke Map untuk disimpan ke database
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'account': account,
@@ -22,7 +21,6 @@ class PasswordModel {
     return map;
   }
 
-  // Convert dari Map ke Object
   factory PasswordModel.fromMap(Map<String, dynamic> map) {
     return PasswordModel(
       id: map['id'],

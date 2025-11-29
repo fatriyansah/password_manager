@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'package:sqflite/sqflite.dart';
+import 'screens/login_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Digunakan sekali untuk reset database jika terjadi error
+  // await deleteDatabase(await getDatabasesPath() + '/passwords.db');
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

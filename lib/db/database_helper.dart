@@ -19,7 +19,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
     );
   }
@@ -30,6 +30,15 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         account TEXT NOT NULL,
         username TEXT NOT NULL,
+        password TEXT NOT NULL
+      )
+    ''');
+
+    // Tabel user
+    await db.execute('''
+      CREATE TABLE users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL
       )
     ''');
@@ -63,6 +72,33 @@ class DatabaseHelper {
   Future<int> deletePassword(int id) async {
     final db = await instance.database;
     return await db.delete('passwords', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // REGISTER
+  Future<int> registerUser(String username, String password) async {
+    final db = await instance.database;
+
+    return await db.insert(
+      'users',
+      {
+        'username': username,
+        'password': password,
+      },
+      conflictAlgorithm: ConflictAlgorithm.fail,
+    );
+  }
+
+  // LOGIN
+  Future<bool> loginUser(String username, String password) async {
+    final db = await instance.database;
+
+    final result = await db.query(
+      'users',
+      where: 'username = ? AND password = ?',
+      whereArgs: [username, password],
+    );
+
+    return result.isNotEmpty;
   }
 }
 

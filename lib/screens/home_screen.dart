@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../db/database_helper.dart';
 import '../models/password_model.dart';
 import 'add_edit_screen.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,12 +30,34 @@ class _HomeScreenState extends State<HomeScreen> {
     loadPasswords();
   }
 
+  void logout() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Password Manager')),
+      appBar: AppBar(
+        title: const Text('Password Manager'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: "Logout",
+            onPressed: logout,
+          ),
+        ],
+      ),
       body: passwords.isEmpty
-          ? const Center(child: Text('Belum ada data password.'))
+          ? const Center(
+              child: Text(
+                'Belum ada data password.',
+                style: TextStyle(fontSize: 16),
+              ),
+            )
           : ListView.builder(
               itemCount: passwords.length,
               itemBuilder: (context, index) {
@@ -79,4 +102,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
